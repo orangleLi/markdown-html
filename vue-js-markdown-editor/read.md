@@ -1,0 +1,456 @@
+alt + M 浏览器预览效果
+# 轮播图
+
+
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bf49b07c98005?w=391&h=160&f=gif&s=557255)
+
+## 使用方式
+
+```
+import swiperNormal from '../../components/swiper/swiper'
+components: { swiperNormal }
+
+<swiper-normal :imgUrls="advertises" height="300rpx" urlFieldName="PhotoUrl" hrefFieldName="linkUrl" @nav="nav"></swiper-normal>
+```
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|imgUrls|Array|[]|轮播图的图片数组|
+|urlFieldName|String|'url'|图片对应的字段名imgUrls[urlFieldName]取值|
+|hrefFieldName|String|'href'|跳转链接对应的字段名imgUrls[hrefFieldName]取值|
+|indicatorDots|Boolean|true|是否显示面板指示点|
+|autoplay|Boolean|true|是否自动播放|
+|circular|Boolean|true|是否循环播放|
+|interval|Number|3000|自动切换时间间隔|
+|duration|Number|1000|滑动动画时长|
+|isDistance|Boolean|false|图片是否圆角|
+|height|String|''|图片高度|
+
+## 事件
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|@nav|EventHandle||图片点击事件，一般用来跳转到轮播图对应的广告页|
+
+# 图标文字
+
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bf61864d89d56?w=401&h=125&f=png&s=16755)
+
+## 使用方式
+### 图标
+```
+import iconText from '../../components/icon-text/icon-text'
+components: { iconText }
+<icon-text :img="imgUrl" :text="name"></icon-text>
+
+<icon-text icon="icon-cart" text="购物车" :num="shopCarNum" @navTo="navTo(0)"></icon-text>
+```
+### 图片
+```
+<icon-text :img="photoUrl" :imgW="140" :imgH="140" :text="categoryName" @click.native="nav(itm)"></icon-text>
+```
+## 参数说明
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|icon|String|''|图片对应的class|
+|text|String|''|文字内容|
+|num|Number|0|右上角数量值|
+|img|String|''|图片地址|
+|imgW|Number|100rpx|图片宽度|
+|imgH|Number|100rpx|图片高度|
+
+## 事件
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|@navTo|EventHandle||点击事件的回调|
+
+# 卡片
+## 使用方式
+card中的元素上下元素产生距离 margin: 20rpx 0;
+```
+import card from '../../components/card/index'
+components: { card }
+<card>
+...
+</card>
+```
+# 商品卡片
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bf75701b6bf55?w=758&h=314&f=png&s=98767)
+## 使用方式
+```
+import grid from '../../components/grid/grid.vue'
+import goodsCard from '../../components/goods-card/goods-card.vue'
+components: { grid, goodsCard }
+<grid>
+	<goods-card style="width: 33.3%;" col="3" :imgHeight="280" @toDatail="toDatail"
+	v-for="(item, index) in recommendationList" :key="index"
+	:goodsInfo="item" title="skuName" price="mainPrice" url="mainPhotoUrl"></goods-card>
+</grid>
+```
+
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|direction|String|'v'|配图及文字信息的排列方式，默认上下垂直排列|
+|imgHeight|Number|200|图片高度,单位rpx|
+|col|String|'1'|一行商品卡片的个数|
+|goodsInfo|Object|{}|数据对象|
+|url|String|'url'|配图地址|
+|title|String|'title'|商品一级标题|
+|subTitle|String|'subTitle'|商品二级标题|
+|price|String|'price'|价格|
+|originalPrice|String|'originalPrice'|原价|
+|type|Number|0|商品类型 0正常 1下架 2所在区域无货|
+
+## 事件
+
+|参数|类型|备注|
+|:-|:-:|-:|
+|@toDatail|EventHandle|跳转详情页回调事件|
+
+## 插槽
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bf8622ea5dace?w=370&h=132&f=png&s=15888)
+
+```
+<grid col="1" class="bg-color-white">
+	<goods-card col="1" direction="h" style="width: 100%;" v-for="(item, index) in produceList" :key="index"
+	:goodsInfo="item" title="skuName" price="mainPrice" url="mainPhotoUrl"
+	@toDatail="toDetail">						
+			<view slot="slot-info" class="add-cart spacing-col-sm flex space-between">
+				<text class="size28 color51">已售{{item.productSalecount}}件</text>
+				<icon type="" class="iconfont icon-cart color-theme good-ani" @click.stop="add(item)"></icon>
+			</view>
+	</goods-card>
+</grid>
+```
+
+`已售24件与购物车按钮部分`为插槽内容，具名插槽，名称为slot-info
+
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bf88d704d8b24?w=336&h=161&f=png&s=19172)
+
+`数量框`为插槽内容，具名插槽，名称为slot-opera
+
+```
+<grid col="1" v-for="(itm, idx) in item.productItem" :key="idx">
+	<goods-card col="1" direction="h"
+	:goodsInfo="itm" url="skuProductPhotoUrl" price="price" title="skuProductName" :type="itm.type"
+	@click.native="toDetail(item, itm)">
+		<select-number slot="slot-opera" :val="parseInt(itm.num)" :index="index" :idx="idx" @inputNumber="inputNumber" class="select-number spacing-col-sm"></select-number>
+	</goods-card>
+</grid>
+```
+# grid
+布局组件，一般与goods-card一块儿使用，效果为grid内的元素白色背景、flex布局、自动换行
+# cell
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bf9592719a6aa?w=452&h=128&f=png&s=9469)
+## 使用方式
+```
+import cell from '../../components/cell/cell.vue'
+components: { cell }
+<cell icon="icon-procurement" title="我的采购" @click.native="navTo('../order/order')" :btLine="true" style="font-size: 30rpx;"></cell>
+
+<cell icon="icon-address" iconRight="icon-gengduo" @click.native="chooseAddress">
+	<view slot="icon" class="spacing-row-sm">
+		<text class="size24 color-gray">送至</text>
+		<text class="size28 color51 spacing-row-sm">北京市海淀区</text>
+	</view>
+</cell>
+```
+
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|icon|String|''|左侧图标|
+|iconRight|String|'icon-right'|右侧图标|
+|title|String|''|左侧文字|
+|desc|String|''|右侧文字|
+|btLine|Boolean|false|是否显示下边框线|
+
+## 事件
+
+|参数|类型|备注|
+|:-|:-:|-:|
+|@navTo|EventHandle|右侧图标文字点击事件|
+
+## 插槽
+
+左侧插槽名称为icon，右侧插槽名称为fun
+```
+<cell icon="icon-procurement" title="左侧文字" iconRight="icon-gengduo" desc="右侧文字" :btLine="true">
+	<view slot="icon">左侧插槽</view>
+	<view slot="fun">右侧插槽</view>
+</cell>
+```
+![](https://user-gold-cdn.xitu.io/2020/4/28/171bfa1d8e9e2e20?w=369&h=47&f=png&s=1767)
+# 卡片切换
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c3c29e0cf809e?w=372&h=573&f=gif&s=402672)
+## 使用方式
+
+```
+<card-switch :nowActive.sync="nowActive" :height.sync="height" :tabArr="['待付款', '待收货', '已完成', '全部订单']" @switchTagClick="switchTagClick">
+	<swiper class="tab-swiper" :style="'height: ' + height +'px;'" @change="switchTag" :current="nowActive">
+		<swiper-item class="tab-swper-item">
+			<scroll-view @scrolltolower="lower" scroll-y="true" :style="'height: ' + height +'px;'">
+				内容1
+			</scroll-view>
+		</swiper-item>
+		<swiper-item class="tab-swper-item">
+			<scroll-view @scrolltolower="lower" scroll-y="true" :style="'height: ' + height +'px;'">
+				内容2
+			</scroll-view>
+		</swiper-item>
+		<swiper-item class="tab-swper-item">
+			<scroll-view @scrolltolower="lower" scroll-y="true" :style="'height: ' + height +'px;'">
+				内容3
+			</scroll-view>
+		</swiper-item>
+		<swiper-item class="tab-swper-item">
+			<scroll-view @scrolltolower="lower" scroll-y="true" :style="'height: ' + height +'px;'">
+				内容4
+			</scroll-view>
+		</swiper-item>
+	</swiper>
+</card-switch>
+
+import cardSwitch from '../../components/card-switch/card-switch.vue'
+export default {
+    components: {
+    	cardSwitch
+    },
+    data() {
+        return {
+            height: 375,
+            nowActive: 0,
+        }
+    },
+    methods: {
+        lower () {
+        	console.log(this.nowActive + '加载更多')
+        },
+        switchTag(e) {
+        	let index = e.detail.current
+        	if (index !== this.nowActive){
+        		this.nowActive = index
+        	}
+        	// 加载数据
+        }
+    }
+}
+```
+
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|tabArr|Array|[]|切换栏文字|
+|nowActive|Number|0|当前活跃栏下标|
+|height|Number|375|内容栏swiper高度（此项只需要在引用组件时传入值即可）|
+
+## 事件
+
+|参数|类型|备注|
+|:-|:-:|-:|
+|@switchTagClick|EventHandle|切换栏文字点击事件|
+
+# button
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c3e42dee680f5?w=384&h=130&f=png&s=7024)
+
+## 使用方式
+
+```
+import buttonRect from '../../components/botton-rect/botton-rect.vue'
+components: {
+	buttonRect
+}
+<button-rect colorBg="#fff" color="#606266" width="206rpx" height="56rpx" border="#eee">
+	<icon class="iconfont icon-phone" type=""></icon>
+	<text class="spacing-row-sm">联系卖家</text>
+</button-rect>
+
+<button-rect colorBg="#fff" color="#606266" width="206rpx" height="56rpx" border="#eee">
+	<icon class="iconfont icon-store1" type=""></icon>
+	<text class="spacing-row-sm">进入店铺</text>
+</button-rect>
+
+<button-rect colorBg="red" @navTo="navTo('/cart')" :disabled="stock.stockNum <= 0">加入购物车</button-rect>
+
+<button-rect colorBg="green" @navTo="navTo('/confirm')" :disabled="stock.stockNum <= 0">一键购</button-rect>
+```
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|color|String|'#fff'|字体颜色|
+|colorBg|String|'transparent'|背景色|
+|width|String|''|按钮宽度|
+|height|String|''|按钮高度|
+|size|String|'26rpx'|字体大小）|
+|radius|String|'10rpx'|圆角大小，例10rpx、50%|
+|disabled|Boolean|false|是否禁用，默认false|
+|border|String|''|边框颜色，例#eee|
+
+## 事件
+
+|参数|类型|备注|
+|:-|:-:|-:|
+|@navTo|EventHandle|按钮点击事件|
+
+# 贴底nav
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c3e9c92404d70?w=376&h=51&f=png&s=2930)
+fixed定位，bottom: 0;
+
+## 使用方式
+
+```
+import buttomNav from '../../components/bottom-nav/bottom-nav.vue'
+components: {
+	buttomNav
+}
+<buttom-nav>
+	<icon-text icon="icon-cart" text="购物车" :num="shopCarNum" @navTo="navTo(0)"></icon-text>
+	<select-number :val="val" @inputNumber="inputNumber"></select-number>
+	<view class="flex">
+		<button-rect colorBg="red" @navTo="navTo(1)" :disabled="stock.stockNum <= 0">加入购物车</button-rect>
+		<button-rect colorBg="green" @navTo="navTo(2)" :disabled="stock.stockNum <= 0">一键购</button-rect>
+	</view>
+</buttom-nav>
+```
+# 输入框
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c3f884865168e?w=373&h=45&f=png&s=1644)
+## 使用方式
+
+```
+import mInput from '../../components/m-input/m-input.vue'
+components: { mInput }
+<m-input placeholder="搜索关键字" :model.sync="message" icon="icon-search" class="flex-1"></m-input>
+```
+
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|placeholder|String|''|placeholder|
+|model|String|'transparent'|绑定的值|
+|icon|String|''|图标|
+
+# 数字框
+
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c472a3e3bc191?w=101&h=40&f=png&s=381)
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c472c53c3ace8?w=375&h=667&f=png&s=37046)
+
+## 使用方式
+
+```
+import selectNumber from '../../components/select-number/select-number'
+components: { selectNumber }
+<select-number slot="slot-opera" :val="parseInt(itm.num)" :index="index" :idx="idx" @inputNumber="inputNumber" class="spacing-col-sm"></select-number>
+```
+**注：select-number会引入promptModal组件**
+
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|index|Number|-1|一级index(店铺下标)|
+|idx|Number|-1|二级index(商品下标)|
+|val|Number|1|值|
+
+# 输入框
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c478525374fde?w=375&h=667&f=png&s=37046)
+## 使用方式
+
+```
+import promptModal from '../promptModal/promptModal.vue'
+components: { promptModal }
+<prompt-modal :isShow="isShow" :val="val" @cancelClick="cancelClick" @confirmClick="confirmClick"></prompt-modal>
+```
+
+## 参数说明
+
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|isShow|Boolean|false|是否显示|
+|val|Number|1|值|
+
+## 事件
+
+|参数|类型|备注|
+|:-|:-:|-:|
+|@cancelClick|EventHandle|取消按钮点击事件|
+|@confirmClick|EventHandle|确认按钮点击事件|
+
+# 地址栏
+
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c4801fc489a4a?w=376&h=92&f=png&s=3495)
+```
+import addressBorder from '../../components/address-border/address-border.vue'
+components: {
+	addressBorder
+}
+<address-border>
+	<view class="size28 flex space-between v-center" v-if="deliveryAddressData && deliveryAddressData.cityAddressId" @click="address">
+		<view>
+			<view class="flex v-center">
+				<text>{{deliveryAddressData.deliveryName}}</text>
+				<text class="spacing-row-30">{{deliveryAddressData.deliveryPhone}}</text>
+				<button-rect v-if="deliveryAddressData.isdefault" class="spacing-row-30" colorBg="red" width="80rpx" height="30rpx" size="24rpx" radius="10rpx">默认</button-rect>
+			</view>
+			<view class="flex v-center margin-top-30">
+				<icon class="iconfont icon-address" type=""></icon>
+				<text class="spacing-row-30">{{deliveryAddressData.deliveryAddress}}</text>
+			</view>
+		</view>
+		<icon class="iconfont icon-right" type=""></icon>
+	</view>
+	<view v-else @click="address">
+		<cell title="请新增收获地址"></cell>
+	</view>
+</address-border>
+```
+# 订单列表
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c4a30e572e52d?w=375&h=667&f=png&s=19112)
+## 使用方式
+```
+import orderRender from './order-render.vue'
+components: {
+	orderRender
+}
+<order-render :orderList="orderList[0]">
+	<button-rect color="#606266" width="166rpx" height="56rpx" border="#eee">取消订单</button-rect>
+	<button-rect colorBg="#ff6c29" width="166rpx" height="56rpx" class="spacing-row-sm">去支付</button-rect>
+</order-render>
+```
+此组件为也为业务组件<br>
+order-render中引入了order-info组件（订单项）<br>
+字段在/components/list/list-order.vue组件中修改
+
+# footer-divider
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c4b382e5862df?w=366&h=227&f=png&s=1968)
+
+## 使用方式
+```
+import footerDivider from '../../components/footer-divider/index.vue'
+components: {
+	footerDivider
+}
+<footer-divider all="true"></footer-divider>
+<footer-divider>到底啦</footer-divider>
+<footer-divider>Time Travel</footer-divider>
+<footer-divider><i class="iconfont icon-fuwu"></i></footer-divider>
+```
+
+## 参数说明
+|参数|类型|默认值|备注|
+|:-|:-:|-:|-:|
+|all|Boolean|false|是否不显示图标|
+
+# 图标
+![](https://user-gold-cdn.xitu.io/2020/4/29/171c4b7bb03a64d5?w=969&h=624&f=png&s=35292)
+## 使用方式
+```
+<i class="iconfont icon-fuwu"></i>
+```
