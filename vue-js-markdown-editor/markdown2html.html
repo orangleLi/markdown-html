@@ -161,7 +161,7 @@
   ```
   import cell from '../../components/cell/cell.vue'
   components: { cell }
-  <cell icon="icon-procurement" title="我的采购" @click.native="navTo('../order/order')" :btLine="true" style="font-size: 30rpx;"></cell>
+  <cell icon="icon-procurement" iconColor="#ff5b1f" title="我的采购" @click.native="navTo('../order/order')" :btLine="true" style="font-size: 30rpx;"></cell>
 
   <cell icon="icon-address" iconRight="icon-gengduo" @click.native="chooseAddress">
     <view slot="icon" class="spacing-row-sm">
@@ -170,7 +170,7 @@
     </view>
   </cell>
   ```
-
+  
   ## 参数说明
 
   |参数|类型|默认值|备注|
@@ -180,6 +180,7 @@
   |title|String|''|左侧文字|
   |desc|String|''|右侧文字|
   |btLine|Boolean|false|是否显示下边框线|
+  |iconColor|String|''|左侧图标颜色|
 
   ## 事件
 
@@ -287,9 +288,9 @@
     <text class="spacing-row-sm">进入店铺</text>
   </button-rect>
 
-  <button-rect colorBg="red" @navTo="navTo('/cart')" :disabled="stock.stockNum <= 0">加入购物车</button-rect>
+  <button-rect colorBg="red" radius="0rpx" size="28rpx" @navTo="navTo('/cart')" :disabled="stock.stockNum <= 0">加入购物车</button-rect>
 
-  <button-rect colorBg="green" @navTo="navTo('/confirm')" :disabled="stock.stockNum <= 0">一键购</button-rect>
+  <button-rect colorBg="green" radius="0rpx" size="28rpx" @navTo="navTo('/confirm')" :disabled="stock.stockNum <= 0">一键购</button-rect>
   ```
   ## 参数说明
 
@@ -465,6 +466,95 @@
   ```
   <i class="iconfont icon-fuwu"></i>
   ```
+  
+  ## Class类名
+  ### 字体
+  字体大小
+  ```
+.size32{font-size: $size32;}
+.size30{font-size: $size30;}
+.size28{font-size: $size28;}
+.size26{font-size: $size26;}
+.size24{font-size: $size24;}
+  ```
+  加粗
+```
+.bold{font-weight: bold;}
+```
+### 颜色
+字体颜色
+```
+.color-theme{color: $color-theme;}
+.color51{color: $color51;}
+.color-gray{color: $color-grey;}
+.color-white{color: $color-white;}
+.color153{color: $color153;}
+```
+背景颜色
+```
+.bg-color-white{background-color: #fff;}
+.bg-color-gray{background-color: #eee;}
+```
+### 布局
+基本采用flex布局
+
+```
+.flex{display: flex;} // 默认水平排列
+.flex-column{flex-direction: column;} // 垂直排列
+.flex-row{flex-direction: row;} // 水平排列
+
+.space-center{justify-content: center;} // 居中对齐
+.space-between{justify-content: space-between;} // 两端对齐
+.space-end{justify-content: flex-end;} // 右起对齐
+
+.v-center{align-items: center;} // 垂直方向对齐
+.flex-1{flex: 1;} // 宽度占满
+.text-center{text-align: center;} // 文本居中
+
+.flex-wrap{flex-wrap: wrap;} // 换行
+.flex-nowrap{flex-wrap: nowrap;} // 不换行
+```
+
+### 间距
+```
+.spacing-col-sm{margin-top: $uni-spacing-col-sm;}
+.spacing-row-sm{margin-left: $uni-spacing-row-sm;}
+.spacing-row-30{margin-left: 30rpx;}
+
+.margin-top-30{margin-top: 30rpx;}
+.margin-bottom-30{margin-bottom: 30rpx;}
+.margin-30{margin: 30rpx;}
+.margin-15{margin: 15rpx;}
+.padding-top-30{padding-top: 30rpx;}
+.padding-bottom-30{padding-bottom: 30rpx;}
+.pad-30{padding: 30rpx;}
+.pad-15{padding: 15rpx;}
+.pad-tb-15{padding: 15rpx 0;}
+.pad-lr-15{padding: 0 15rpx;}
+.pad-tb-30{padding: 30rpx 0;}
+.pad-lr-30{padding: 0 30rpx;}
+```
+### 边框
+```
+.border-t-line{border-top: 1rpx solid #eee;}
+.border-b-line{border-bottom: 1rpx solid #eee;}
+.border-l-line{border-left: 1rpx solid #eee;}
+.border-r-line{border-right: 1rpx solid #eee;}
+```
+### 盒子模型
+```
+.border-box{box-sizing: border-box;}
+```
+### 文本缩略
+```
+.clamp-1 // 显示一行，超出显示省略号
+.clamp-2 // 显示两行，超出显示省略号
+```
+### 其它
+```
+.price-icon // ￥符号
+.mt-bottom-nav{margin-bottom: $bottom-nav-height;} // 距离底部100rpx
+```
 </div>
 <div id="html-wrapper" class="markdown-body"></div>
 <script src='js/marked.min.js'></script>
